@@ -1,0 +1,71 @@
+.root {
+    -fx-background-color: #2B2B2B;
+}
+.button {
+    -fx-padding: 1em;
+    -fx-background-insets: 5px;
+    -fx-font-size: 11pt;
+    -fx-font-weight: bold;
+    -fx-background-color: #4974ff;
+    -fx-opacity: 0.9;
+    -fx-text-fill: black;
+}
+
+.button:hover {
+    -fx-opacity: 1;
+    -fx-scale-x: 105%;
+    -fx-scale-y: 105%;
+}
+
+.button:pressed {
+    -fx-scale-x: 95%;
+    -fx-scale-y: 95%;
+}
+
+.text-area {
+    -fx-font-family: "Lucida Console";
+    -fx-font-size: 10pt;
+    -fx-text-fill: darkorange;
+    -fx-background-color: #3C3F41;
+    -fx-background-insets: 8px;
+}
+.content {
+    -fx-background-color: transparent;
+}
+.viewport{
+    -fx-background-color: transparent;
+}
+
+#count, #splitter {
+    -fx-text-fill: white;
+    -fx-label-padding: 5px;
+}
+
+.orange {
+    -fx-background-color: #ffb607;
+}
+
+.green {
+    -fx-background-color: #39ff2b;
+}
+
+.slider {
+    -fx-padding: 1em;
+}
+
+.disabled {
+    visibility: hidden;
+}
+
+.specButton {
+    -fx-background-color: orange;
+}
+
+.toggle-button {
+    -fx-background-color: grey;
+    -fx-padding: 1em;
+    -fx-background-insets: 5px;
+    -fx-font-size: 9pt;
+    -fx-font-weight: bold;
+    -fx-text-fill: black;
+}

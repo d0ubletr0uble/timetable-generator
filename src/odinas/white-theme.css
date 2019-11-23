@@ -1,0 +1,19 @@
+.root {
+    -fx-background-color: #9a9a9a;
+}
+.text-area {
+    -fx-background-color: white;
+    -fx-text-fill: black;
+}
+.toggle-button {
+    -fx-background-color: #2B2B2B;
+    -fx-padding: 1em;
+    -fx-background-insets: 5px;
+    -fx-font-size: 9pt;
+    -fx-font-weight: bold;
+    -fx-text-fill: #e29600;
+}
+
+#count, #splitter {
+    -fx-text-fill: black;
+}

@@ -1,0 +1,8 @@
+Pasirinkus dominančią ar aktualią duomenų struktūrą, reikia:
+- apsibrėžti jos sąsają (interfeisą);
+- suprogramuoti sąsają realizuojančią klasę (-es);
+- sudaryti testo klases; 
+- atlikti efektyvumo tyrimą (palyginti su kita DS);
+- * pateikti demonstracinį panaudojimo variantą. 
+
+Terminas – iki gruodžio mėnesio 2 savaitės.
