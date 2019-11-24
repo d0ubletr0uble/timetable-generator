@@ -1,9 +1,10 @@
 package odinas;
 
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class CBuffer<T> implements CircularBuffer<T> {
+public class CBuffer<T> implements CircularBuffer<T>, Iterable<T> {
     private Object[] elements;
     private int head = -1;
     private int tail = -1;
@@ -11,6 +12,12 @@ public class CBuffer<T> implements CircularBuffer<T> {
 
     public CBuffer(int maxSize) {
         elements = new Object[maxSize];
+    }
+
+    public CBuffer(T[] elements) {
+        this.elements = elements;
+        head = tail = 0;
+        size = elements.length;
     }
 
     @Override
@@ -24,7 +31,7 @@ public class CBuffer<T> implements CircularBuffer<T> {
     }
 
     @Override
-    public void add(T element) {
+    public void add(T element) throws IndexOutOfBoundsException {
         if (isFull())
             throw new IndexOutOfBoundsException("Buffer is full");
         else if (tail == -1) {
@@ -39,7 +46,7 @@ public class CBuffer<T> implements CircularBuffer<T> {
     }
 
     @Override
-    public T pop() {
+    public T remove() throws NoSuchElementException {
         if (isEmpty())
             throw new NoSuchElementException("Buffer is empty");
         else {
@@ -65,6 +72,29 @@ public class CBuffer<T> implements CircularBuffer<T> {
 
     @Override
     public String toString() {
-        return Arrays.toString(elements) + head + ' ' + tail;
+        return Arrays.toString(elements);
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return new InfiniteIterator();
+    }
+
+    /**
+     * Never ending looping iterator (used for calculating timetables or shifts in fabrics, etc.)
+     */
+    private class InfiniteIterator implements Iterator<T> {
+        private int i = -1;
+
+        @Override
+        public boolean hasNext() {
+            return true;
+        }
+
+        @Override
+        public T next() {
+            i = (i + 1) % elements.length;
+            return (T) elements[i];
+        }
     }
 }

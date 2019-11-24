@@ -1,50 +1,63 @@
 package odinas;
 
 import javafx.application.Application;
+import javafx.collections.FXCollections;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Iterator;
 import java.util.Locale;
 
 /**
  * @author Tomas Odinas <IF-8/1>
  */
 public class GUI extends Application {
-
     private BorderPane root = new BorderPane();
     private Scene scene = new Scene(root, 650, 360);
-    private ToggleButton themeButton = new ToggleButton("a");
+    private ToggleButton themeButton = new ToggleButton("Keisti temą");
     private TextArea console = new TextArea();
     private HBox bottom = new HBox();
     private FlowPane panel1 = new FlowPane();
     private FlowPane panel2 = new FlowPane();
     private FlowPane panel3 = new FlowPane();
     private HBox menu = new HBox();
-    private Label bookCount = new Label();
-    private Button pollLastButton = new Button("a");
-    private Button addButton = new Button("a");
-    private TextField delimiter = new TextField(" by");
+
+    private Button generateButton = new Button("Sudaryti tvarkaraštį");
+    private Button get1 = new Button("Rodyti sekantį");
+    private Button get2 = new Button("Rodyti sekančius: 1");
+    private Button save = new Button("Išsaugoti");
+    ChoiceBox<? extends String> choiceBox = new ChoiceBox<>(FXCollections.observableArrayList("Diena", "Mėnuo", "Metai"));
+
+    private Label label = new Label("Elementus skirkite ;");
+    private TextField textInput = new TextField();
+
+    private Iterator<String> elementsIterator;
+    private LocalDate time = LocalDate.now();
 
     @Override
     public void start(Stage primaryStage) {
+        Locale.setDefault(Locale.US); // Suvienodiname skaičių formatus
         initConsole();
         initMenu();
         initBottom();
         scene.getStylesheets().add("odinas/black-theme.css");
-        primaryStage.setTitle("a");
+        primaryStage.setTitle("Tvarkaraščiai");
         primaryStage.setMaximized(true);
-        Locale.setDefault(Locale.US); // Suvienodiname skaičių formatus
         primaryStage.setScene(scene);
         primaryStage.show();
-
-        test();//todo
-
     }
 
     private void initBottom() {
@@ -59,48 +72,91 @@ public class GUI extends Application {
     }
 
     private void initPanel3() {
-        Button btn1 = new Button("a");
-        Button btn2 = new Button("a");
-        Button clear = new Button("a");
-        btn2.getStyleClass().add("orange");
-        clear.getStyleClass().add("green");
+        save.setOnMouseClicked(s -> save(console.getText()));
+        save.getStyleClass().add("orange");
 
-        panel3.getChildren().add(btn2);
-        panel3.getChildren().add(btn1);
-        panel3.getChildren().add(clear);
+        choiceBox.getSelectionModel().select(0);
+        panel3.getChildren().add(choiceBox);
+        panel3.getChildren().add(save);
+        setVisibility(save, false);
+    }
+
+    private void save(String text) {
+        text = text.substring(24).replace(' ', ';');
+        FileChooser chooser= new FileChooser();
+        chooser.setInitialFileName("tvarkaraštis.csv");
+        chooser.setInitialDirectory(new File(System.getProperty("user.home") + "/Desktop"));
+        File output = chooser.showSaveDialog(new Stage());
+        try {
+            Files.write(Paths.get(output.getPath()),text.getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void initPanel1() {
-        Button generateSetButton = new Button("aet");
-        Button iterator1 = new Button("a");
-        Button iterator2 = new Button("a");
-        Button heightButton = new Button("a");
 
+        generateButton.setOnMouseClicked(s -> generateTimetable(textInput.getText()));
+        get1.setOnMouseClicked(s -> showNext());
+        get2.setOnMouseClicked(s -> showNext(Integer.parseInt(textInput.getText())));
+        panel1.getChildren().add(generateButton);
+        panel1.getChildren().add(get1);
+        panel1.getChildren().add(get2);
 
-        panel1.getChildren().add(generateSetButton);
-        panel1.getChildren().add(iterator1);
-        panel1.getChildren().add(iterator2);
-        panel1.getChildren().add(heightButton);
-        panel1.getChildren().add(pollLastButton);
-        panel1.getChildren().add(addButton);
+        setVisibility(get1, false);
+        setVisibility(get2, false);
+    }
 
-        flipButton(pollLastButton);
-        flipButton(addButton);
+    private void showNext(int times) {
+        for (int i = 0; i < times; i++) {
+            showNext();
+        }
+    }
+
+    private void showNext() {
+        System.out.println(getNextTime(choiceBox.getSelectionModel().getSelectedIndex()) + " " + elementsIterator.next());
+    }
+
+    private void generateTimetable(String elements) {
+        CBuffer<String> timetable = new CBuffer<>(elements.split(";"));
+        System.out.println("Tvarkaraštis sudarytas" + System.lineSeparator());
+        label.setText("Įveskite kiekį");
+        textInput.setText("1");
+        textInput.setOnKeyTyped(s -> get2.setText("Rodyti sekančius: " + textInput.getText()));
+
+        setVisibility(get1, true);
+        setVisibility(get2, true);
+        setVisibility(save, true);
+        setVisibility(generateButton, false);
+
+        elementsIterator = timetable.iterator();
+
+    }
+
+    private String getNextTime(int selectedIndex) {
+        switch (selectedIndex) {
+            case 0:
+                time = time.plusDays(1);
+                return time.toString();
+            case 1:
+                time = time.plusMonths(1);
+                return time.format(DateTimeFormatter.ofPattern("yyyy-MM"));
+            default:
+                time = time.plusYears(1);
+                return time.format(DateTimeFormatter.ofPattern("yyyy"));
+        }
     }
 
     private void initPanel2() {
-        HBox splitterField = new HBox();
-        Label label = new Label("a");
-        label.setId("splitter");
-        splitterField.getChildren().add(label);
-        splitterField.getChildren().add(delimiter);
-
-        panel2.getChildren().add(bookCount);
-        panel2.getChildren().add(splitterField);
+        HBox textInput = new HBox();
+        label.setId("label");
+        textInput.getChildren().add(label);
+        textInput.getChildren().add(this.textInput);
+        panel2.getChildren().add(textInput);
     }
 
-    private void flipButton(Button button) {
-        if (button.getStyleClass().contains("disabled")) {
+    private void setVisibility(Button button, boolean enable) {
+        if (enable) {
             button.getStyleClass().remove("disabled");
             button.setManaged(true);
         } else {
@@ -156,7 +212,4 @@ public class GUI extends Application {
         launch(args);
     }
 
-    private static void test() {
-
-    }
 }

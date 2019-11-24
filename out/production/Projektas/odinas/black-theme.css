@@ -36,7 +36,7 @@
     -fx-background-color: transparent;
 }
 
-#count, #splitter {
+#count, #label {
     -fx-text-fill: white;
     -fx-label-padding: 5px;
 }

@@ -1,9 +1,9 @@
 package tests;
 
 import odinas.CBuffer;
+import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -27,8 +27,6 @@ class CBufferTest {
             a.add(5);
             assertTrue(a.isFull());
         }
-
-
     }
 
     @org.junit.jupiter.api.Test
@@ -40,10 +38,8 @@ class CBufferTest {
         var a = new CBuffer<Integer>(3);
         a.add(1);
         assertFalse(a.isEmpty());
-        a.pop();
+        a.remove();
         assertTrue(a.isEmpty());
-
-
     }
 
     @org.junit.jupiter.api.Test
@@ -64,6 +60,33 @@ class CBufferTest {
                 assertTrue(elements[tail].equals(element));
             }
         }
+    }
 
+
+    @Test
+    void clear() {
+        var a = new CBuffer<String>(3);
+        assertTrue(a.isEmpty());
+        a.add("asd");
+        assertFalse(a.isEmpty());
+        a.clear();
+        assertTrue(a.isEmpty());
+    }
+
+    @Test
+    void peek() throws NoSuchFieldException, IllegalAccessException {
+        var a = new CBuffer<Integer>(3);
+        assertNull(a.peek());
+        a.add(5);
+        a.add(6);
+        var field = a.getClass().getDeclaredField("size");
+        field.setAccessible(true);
+        int size1 = (int) field.get(a);
+
+        assertEquals(5, a.peek());
+        var field2 = a.getClass().getDeclaredField("size");
+        field2.setAccessible(true);
+        int size2 = (int) field2.get(a);
+        assertEquals(size1, size2);
     }
 }
