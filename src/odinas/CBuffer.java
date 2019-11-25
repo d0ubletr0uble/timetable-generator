@@ -81,7 +81,7 @@ public class CBuffer<T> implements CircularBuffer<T>, Iterable<T> {
     }
 
     /**
-     * Never ending looping iterator (used for calculating timetables or shifts in fabrics, etc.)
+     * Infinite looping iterator (used for calculating timetables or shifts in fabrics, etc.)
      */
     private class InfiniteIterator implements Iterator<T> {
         private int i = -1;

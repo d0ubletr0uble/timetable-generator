@@ -39,6 +39,7 @@ public class GUI extends Application {
     private Button get1 = new Button("Rodyti sekantį");
     private Button get2 = new Button("Rodyti sekančius: 1");
     private Button save = new Button("Išsaugoti");
+    private Button benchmark = new Button("Greitaveika");
     ChoiceBox<? extends String> choiceBox = new ChoiceBox<>(FXCollections.observableArrayList("Diena", "Mėnuo", "Metai"));
 
     private Label label = new Label("Elementus skirkite ;");
@@ -73,11 +74,13 @@ public class GUI extends Application {
 
     private void initPanel3() {
         save.setOnMouseClicked(s -> save(console.getText()));
+        benchmark.setOnMouseClicked(s-> new Benchmark().showTest());
         save.getStyleClass().add("orange");
-
+        benchmark.getStyleClass().add("green");
         choiceBox.getSelectionModel().select(0);
         panel3.getChildren().add(choiceBox);
         panel3.getChildren().add(save);
+        panel3.getChildren().add(benchmark);
         setVisibility(save, false);
     }
 

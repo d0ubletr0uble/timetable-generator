@@ -31,11 +31,8 @@ class CBufferTest {
 
     @org.junit.jupiter.api.Test
     void isEmpty() {
-        for (int i = 1; i < 15; i++) {
-            var a = new CBuffer<Integer>(i);
-            assertTrue(a.isEmpty());
-        }
         var a = new CBuffer<Integer>(3);
+        assertTrue(a.isEmpty());
         a.add(1);
         assertFalse(a.isEmpty());
         a.remove();
@@ -45,7 +42,6 @@ class CBufferTest {
     @org.junit.jupiter.api.Test
     void add() throws NoSuchFieldException, IllegalAccessException {
         for (int i = 1; i < 100; i++) {
-
             var a = new CBuffer<Integer>(i);
             Field f = a.getClass().getDeclaredField("elements");
             Field f2 = a.getClass().getDeclaredField("tail");
