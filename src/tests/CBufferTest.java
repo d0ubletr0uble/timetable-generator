@@ -85,4 +85,14 @@ class CBufferTest {
         int size2 = (int) field2.get(a);
         assertEquals(size1, size2);
     }
+
+    @Test
+    void contains() {
+        var a = new CBuffer<Integer>(3);
+        assertFalse(a.contains(5));
+        a.add(6);
+        assertTrue(a.contains(6));
+        a.remove();
+        assertFalse(a.contains(6));
+    }
 }

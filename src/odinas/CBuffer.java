@@ -34,15 +34,13 @@ public class CBuffer<T> implements CircularBuffer<T>, Iterable<T> {
     public void add(T element) throws IndexOutOfBoundsException {
         if (isFull())
             throw new IndexOutOfBoundsException("Buffer is full");
-        else if (tail == -1) {
+        else if (tail == -1)
             tail = head = 0;
-            elements[0] = element;
-            size++;
-        } else {
+         else
             tail = (tail + 1) % elements.length;
-            elements[tail] = element;
-            size++;
-        }
+
+        elements[tail] = element;
+        size++;
     }
 
     @Override
@@ -59,15 +57,31 @@ public class CBuffer<T> implements CircularBuffer<T>, Iterable<T> {
 
     @Override
     public T peek() {
-        if (!isEmpty())
-            return (T) elements[head];
+        if (isEmpty())
+            return null;
 
-        return null;
+        return (T) elements[head];
     }
 
+    /**
+     * Clears buffer (logically)
+     */
     @Override
     public void clear() {
         tail = head = size = 0;
+    }
+
+    @Override
+    public boolean contains(T element) {
+        if (!isEmpty())
+            if (head == tail)
+                return element.equals(elements[0]);
+
+        for (int i = head; i != tail; i = (i + 1) % elements.length) {
+            if (element.equals(elements[i]))
+                return true;
+        }
+        return false;
     }
 
     @Override

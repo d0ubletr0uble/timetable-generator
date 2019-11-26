@@ -34,7 +34,13 @@ public interface CircularBuffer<T> {
     T peek();
 
     /**
-     * Clears buffer to empty
+     * Clears buffer
      */
     void clear();
+
+    /**
+     * @param element element to search for
+     * @return true if buffer contains this element, false otherwise
+     */
+    boolean contains(T element);
 }
