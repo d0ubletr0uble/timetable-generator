@@ -1,4 +1,4 @@
-# Projektas_IF-8-1_Odinas_Tomas
+# Tvarkaraščių generatorius
 Universali slenkančių tvarkaraščių sudarymo programa panaudojant Circular buffer duomenų struktūrą.
 
 * Tamsi/Šviesi tema 
